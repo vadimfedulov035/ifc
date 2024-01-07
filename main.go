@@ -66,7 +66,7 @@ func ToStringDateIFC(date [3]int) string {
 		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
 		"septembro", "oktobro", "novembro", "decembro"}
 	year, monthIFC, monthDayIFC := date[0], date[1], date[2]
-	description := fmt.Sprintf("Jaro %d: la %s de %s", year, monthDayIFC, monthNamesIFC_EO[monthIFC-1])
+	description := fmt.Sprintf("Jaro %d: la %d de %s", year, monthDayIFC, monthNamesIFC_EO[monthIFC-1])
 	return description
 }
 
