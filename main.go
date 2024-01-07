@@ -5,9 +5,10 @@ import (
 	"time"
 )
 
-monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
+var monthNamesIFC_EO = [13]string{"januaro", "februaro", "marto",
 	"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
 	"septembro", "oktobro", "novembro", "decembro"}
+
 const minutesPerHour = 60
 
 // check if year is leap
