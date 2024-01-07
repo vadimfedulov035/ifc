@@ -84,7 +84,7 @@ func GetStringDateIFC(timezoneShiftMinutes int) string {
 	yearDay := calcYearDay(month, monthDay, leapYear)
 	monthIFC, monthDayIFC := calcDateIFC(yearDay, leapYear)
 	// IFC date string
-	stringDateIFC := fmt.Sprintf("La %d-a de %s, jaro %d", monthDayIFC, monthNamesIFC_EO[monthIFC-1], year)
+	stringDateIFC := fmt.Sprintf("La %d-a de %s, %d", monthDayIFC, monthNamesIFC_EO[monthIFC-1], year)
 	return stringDateIFC
 }
 
