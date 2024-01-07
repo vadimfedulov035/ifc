@@ -70,7 +70,7 @@ func ToStringDateIFC(date [3]int) string {
 	return description
 }
 
-func GetStringDateIFC(timezoneShiftMinutes) string {
+func GetStringDateIFC(timezoneShiftMinutes int) string {
 	const minutesPerHour = 60
 	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
 		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
@@ -99,6 +99,6 @@ func GetNumericDateIFC(timezoneShiftMinutes int) [3]int {
 	yearDay := calcYearDay(month, monthDay, leapYear)
 	monthIFC, monthDayIFC := calcDateIFC(yearDay, leapYear)
 	// IFC date array
-	numericDateIFC = [3]int{year, monthIFC, monthDayIFC}
+	numericDateIFC := [3]int{year, monthIFC, monthDayIFC}
 	return numericDateIFC
 }
