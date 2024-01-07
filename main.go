@@ -5,10 +5,6 @@ import (
 	"time"
 )
 
-var monthNamesIFC_EO = [13]string{"januaro", "februaro", "marto",
-	"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
-	"septembro", "oktobro", "novembro", "decembro"}
-
 const minutesPerHour = 60
 
 // check if year is leap
@@ -68,12 +64,18 @@ func calcDateIFC(day int, leapYear bool) (int, int) {
 }
 
 func ToStringDateIFC(date [3]int) string {
+	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
+		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
+		"septembro", "oktobro", "novembro", "decembro"}
 	year, monthIFC, monthDayIFC := date[0], dates[1], dates[2]
 	description := fmt.Sprintf("Jaro %d: la %s de %s", year, monthDayIFC, monthNamesIFC_EO[monthIFC-1])
 	return description
 }
 
 func GetStringDateIFC(timezoneShiftMinutes) string {
+	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
+		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
+		"septembro", "oktobro", "novembro", "decembro"}
 	place := time.FixedZone("UTC", timezoneShiftMinutes*minutesPerHour)
 	timestamp := time.Now().In(place)
 	// get Gregorian date
