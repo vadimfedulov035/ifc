@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-const minutesPerHour = 60
-
 // check if year is leap
 func ifLeapYear(year int) bool {
 	leapYear := year%4 == 0 && !(year%100 == 0) || year%400 == 0
@@ -73,6 +71,7 @@ func ToStringDateIFC(date [3]int) string {
 }
 
 func GetStringDateIFC(timezoneShiftMinutes) string {
+	const minutesPerHour = 60
 	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
 		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
 		"septembro", "oktobro", "novembro", "decembro"}
@@ -90,6 +89,7 @@ func GetStringDateIFC(timezoneShiftMinutes) string {
 }
 
 func GetNumericDateIFC(timezoneShiftMinutes int) {
+	const minutesPerHour = 60
 	place := time.FixedZone("UTC", timezoneShiftMinutes*minutesPerHour)
 	timestamp := time.Now().In(place)
 	// get Gregorian date
