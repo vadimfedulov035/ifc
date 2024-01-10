@@ -1,9 +1,15 @@
 package ifc
 
 import (
-	"strconv"
 	"time"
 )
+
+type DateInfo struct {
+	Year      int
+	Month     int
+	MonthName string
+	Day       int
+}
 
 // checks if year is leap
 func ifLeapYear(year int) bool {
@@ -61,34 +67,27 @@ func calcDateIFC(day int, leapYear bool) (int, int) {
 	return month, monthDay
 }
 
-// returns IFC date as an array of ints
-func GetNumsDateIFC(timezoneShiftMinutes int) [3]int {
+// returns IFC date as DateInfo struct
+func GetDateInfo(timezoneShiftMinutes int) DateInfo {
 	const minutesPerHour = 60
+	monthNamesEO := [13]string{"januaro", "februaro", "marto",
+		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
+		"septembro", "oktobro", "novembro", "decembro"}
 	place := time.FixedZone("UTC", timezoneShiftMinutes*minutesPerHour)
 	timestamp := time.Now().In(place)
 	// get Gregorian date
-	year, month, monthDay := timestamp.Year(), int(timestamp.Month()), timestamp.Day()
+	yearG, monthG, dayG := timestamp.Year(), int(timestamp.Month()), timestamp.Day()
 	// calculate numerical IFC date
-	leapYear := ifLeapYear(year)
-	yearDay := calcYearDay(month, monthDay, leapYear)
-	monthNumIFC, monthDayNumIFC := calcDateIFC(yearDay, leapYear)
-	//
-	numsDateIFC := [3]int{year, monthNumIFC, monthDayNumIFC}
-	return numsDateIFC
-}
-
-// returns IFC date as an array of strings
-func GetStrsDateIFC(timezoneShiftMinutes int) [3]string {
-	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
-		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
-		"septembro", "oktobro", "novembro", "decembro"}
-	// calculate numerical IFC date
-	numsDateIFC := GetNumsDateIFC(timezoneShiftMinutes)
-	year, monthIFC, monthDayIFC := numsDateIFC[0], numsDateIFC[1], numsDateIFC[2]
-	// convert ints to strings
-	yearStr := strconv.Itoa(year)
-	monthStrIFC := monthNamesIFC_EO[monthIFC-1]
-	monthDayStrIFC := strconv.Itoa(monthDayIFC)
-	strsDateIFC := [3]string{yearStr, monthStrIFC, monthDayStrIFC}
-	return strsDateIFC
+	leapYear := ifLeapYear(yearG)
+	dayInYear := calcYearDay(monthG, dayG, leapYear)
+	year := yearG
+	month, day := calcDateIFC(dayInYear, leapYear)
+	monthName := monthNamesEO[month-1]
+	dateInfo := DateInfo{
+		Year:      year,
+		Month:     month,
+		MonthName: monthName,
+		Day:       day,
+	}
+	return dateInfo
 }
