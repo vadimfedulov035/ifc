@@ -1,17 +1,17 @@
 package ifc
 
 import (
-	"fmt"
+	"strconv"
 	"time"
 )
 
-// check if year is leap
+// checks if year is leap
 func ifLeapYear(year int) bool {
 	leapYear := year%4 == 0 && !(year%100 == 0) || year%400 == 0
 	return leapYear
 }
 
-// calculate year day according to Gregorian calendar
+// calculates year day according to Gregorian calendar
 func calcYearDay(month int, monthDay int, leapYear bool) int {
 	yearDay := 0
 	monthDays := []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
@@ -25,7 +25,7 @@ func calcYearDay(month int, monthDay int, leapYear bool) int {
 	return yearDay
 }
 
-// calculate date according to IFC
+// calculates date according to IFC
 func calcDateIFC(day int, leapYear bool) (int, int) {
 	const leapDay = 169
 	yearDay := 365
@@ -61,44 +61,34 @@ func calcDateIFC(day int, leapYear bool) (int, int) {
 	return month, monthDay
 }
 
-func ToStringDateIFC(date [3]int) string {
-	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
-		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
-		"septembro", "oktobro", "novembro", "decembro"}
-	year, monthIFC, monthDayIFC := date[0], date[1], date[2]
-	description := fmt.Sprintf("Jaro %d: la %d de %s", year, monthDayIFC, monthNamesIFC_EO[monthIFC-1])
-	return description
-}
-
-func GetStringDateIFC(timezoneShiftMinutes int) string {
-	const minutesPerHour = 60
-	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
-		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
-		"septembro", "oktobro", "novembro", "decembro"}
-	place := time.FixedZone("UTC", timezoneShiftMinutes*minutesPerHour)
-	timestamp := time.Now().In(place)
-	// get Gregorian date
-	year, month, monthDay := timestamp.Year(), int(timestamp.Month()), timestamp.Day()
-	leapYear := ifLeapYear(year)
-	// calculate IFC date
-	yearDay := calcYearDay(month, monthDay, leapYear)
-	monthIFC, monthDayIFC := calcDateIFC(yearDay, leapYear)
-	// IFC date string
-	stringDateIFC := fmt.Sprintf("La %d-a de %s, %d", monthDayIFC, monthNamesIFC_EO[monthIFC-1], year)
-	return stringDateIFC
-}
-
-func GetNumericDateIFC(timezoneShiftMinutes int) [3]int {
+// returns IFC date as an array of ints
+func GetNumsDateIFC(timezoneShiftMinutes int) [3]int {
 	const minutesPerHour = 60
 	place := time.FixedZone("UTC", timezoneShiftMinutes*minutesPerHour)
 	timestamp := time.Now().In(place)
 	// get Gregorian date
 	year, month, monthDay := timestamp.Year(), int(timestamp.Month()), timestamp.Day()
+	// calculate numerical IFC date
 	leapYear := ifLeapYear(year)
-	// calculate IFC date
 	yearDay := calcYearDay(month, monthDay, leapYear)
-	monthIFC, monthDayIFC := calcDateIFC(yearDay, leapYear)
-	// IFC date array
-	numericDateIFC := [3]int{year, monthIFC, monthDayIFC}
-	return numericDateIFC
+	monthNumIFC, monthDayNumIFC := calcDateIFC(yearDay, leapYear)
+	//
+	numsDateIFC := [3]int{year, monthNumIFC, monthDayNumIFC}
+	return numsDateIFC
+}
+
+// returns IFC date as an array of strings
+func GetStrsDateIFC(timezoneShiftMinutes int) [3]string {
+	monthNamesIFC_EO := [13]string{"januaro", "februaro", "marto",
+		"aprilo", "majo", "junio", "sunio", "julio", "aŭgusto",
+		"septembro", "oktobro", "novembro", "decembro"}
+	// calculate numerical IFC date
+	numsDateIFC := GetNumsDateIFC(timezoneShiftMinutes)
+	year, monthIFC, monthDayIFC := numsDateIFC[0], numsDateIFC[1], numsDateIFC[2]
+	// convert ints to strings
+	yearStr := strconv.Itoa(year)
+	monthStrIFC := monthNamesIFC_EO[monthIFC-1]
+	monthDayStrIFC := strconv.Itoa(monthDayIFC)
+	strsDateIFC := [3]string{yearStr, monthStrIFC, monthDayStrIFC}
+	return strsDateIFC
 }

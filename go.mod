@@ -1,3 +1,3 @@
-module github.com/vadimfedulov035/ifc
+module ifc
 
 go 1.21.1
