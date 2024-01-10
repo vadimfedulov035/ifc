@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// convenient data format
+// convenient date info struct
 type DateInfo struct {
 	Year      int
 	Month     int
@@ -78,12 +78,13 @@ func GetDateInfo(timezoneShiftMinutes int) DateInfo {
 	timestamp := time.Now().In(place)
 	// get Gregorian date
 	yearG, monthG, dayG := timestamp.Year(), int(timestamp.Month()), timestamp.Day()
-	// calculate numerical IFC date
+	// calculate IFC date info
 	leapYear := ifLeapYear(yearG)
 	dayInYear := calcYearDay(monthG, dayG, leapYear)
 	year := yearG
 	month, day := calcDateIFC(dayInYear, leapYear)
 	monthName := monthNamesEO[month-1]
+	// package IFC date info
 	dateInfo := DateInfo{
 		Year:      year,
 		Month:     month,
