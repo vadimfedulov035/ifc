@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// convenient data format
 type DateInfo struct {
 	Year      int
 	Month     int
